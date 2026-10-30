@@ -1,9 +1,48 @@
-body { background: #fafafa; color: #111; font-family: serif; margin: 20px; }
-fieldset { border: 1px solid #666; }
-table { border-collapse: collapse; }
-th, td { border: 1px solid #777; padding: 5px; text-align: left; }
-caption { text-align: left; margin-bottom: 5px; }
-td input { width: 9em; }
+* { box-sizing: border-box; }
+body { background: #fafafa; color: #111; font: 16px/1.45 serif; margin: 0; }
+main { max-width: 980px; margin: 0 auto; padding: 24px 20px; }
+h1 { font-size: 1.8rem; margin: 0 0 24px; }
+h2 { font-size: 1.25rem; margin: 0 0 16px; }
+p { margin: 0 0 12px; }
+fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+.entrada { margin-bottom: 24px; }
+.campos { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
+.campos label { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.painel { border: 1px solid #777; padding: 20px; margin-bottom: 24px; min-width: 0; }
+input, select, button { font: inherit; color: inherit; }
+input, select { min-width: 0; padding: 4px 6px; border: 1px solid #777; background: #fff; }
+.campos input { width: 100%; min-height: 34px; }
+button { min-height: 34px; padding: 4px 12px; cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.orientacao { font-size: .9rem; }
 .tabela { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #777; padding: 6px; text-align: left; }
+th { font-weight: bold; }
+caption { text-align: left; margin-bottom: 8px; }
+.editor-transicoes { display: flex; gap: 8px; align-items: flex-start; min-width: 650px; }
+.transicoes { table-layout: fixed; flex: 1; min-width: 0; }
+.transicoes .direcao { width: 82px; }
+.transicoes thead tr { height: 40px; }
+.transicoes th { white-space: nowrap; font-size: .9rem; }
+.transicoes tbody tr { height: 46px; }
+.transicoes input, .transicoes select { width: 100%; height: 32px; }
+.exclusoes { flex: 0 0 76px; padding-top: 40px; display: grid; grid-auto-rows: 46px; align-items: center; }
+.exclusoes button { width: 100%; }
+.acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
+#adicionar { font-size: 1.4rem; font-weight: bold; line-height: 1; min-width: 40px; }
+#semTransicoes { margin: 12px 0 0; }
 code { white-space: pre-wrap; overflow-wrap: anywhere; }
-.erro { color: #8b0000; background: #ffe8e8; border: 2px solid #8b0000; padding: 10px; font-weight: bold; }
+#mensagem { overflow-wrap: anywhere; }
+.erro, #aviso { border: 2px solid currentColor; padding: 10px; font-weight: bold; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 640px) {
+    main { padding: 20px 12px; }
+    .painel { padding: 14px; }
+    .campos { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .campos label:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 380px) {
+    .campos { grid-template-columns: 1fr; }
+}

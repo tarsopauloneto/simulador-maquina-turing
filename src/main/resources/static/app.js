@@ -15,6 +15,7 @@ const tabela = document.getElementById('transicoes');
 const mensagem = document.getElementById('mensagem');
 const detalhes = document.getElementById('detalhes');
 const historico = document.getElementById('historico');
+const exclusoes = document.getElementById('exclusoes');
 
 function configuracaoValida(dados) {
     const estadoValido = valor => typeof valor === 'string' && valor.trim().length > 0;
@@ -87,21 +88,27 @@ function adicionarTransicao(transicao) {
     excluir.type = 'button';
     excluir.textContent = 'Excluir';
     excluir.addEventListener('click', () => {
+        const indice = linha.sectionRowIndex;
         linha.remove();
+        excluir.remove();
         atualizarRotulos();
         alterar();
+        (exclusoes.children[indice] || exclusoes.lastElementChild
+            || document.getElementById('adicionar')).focus();
     });
-    linha.insertCell().append(excluir);
+    exclusoes.append(excluir);
     atualizarRotulos();
 }
 
 function atualizarRotulos() {
-    const nomes = ['Estado atual', 'Símbolo lido', 'Novo estado', 'Símbolo escrito', 'Direção', 'Excluir'];
+    const nomes = ['Estado atual', 'Símbolo lido', 'Novo estado', 'Símbolo escrito', 'Direção'];
     Array.from(tabela.rows).forEach((linha, indice) => {
-        linha.querySelectorAll('input, select, button').forEach((controle, coluna) => {
+        linha.querySelectorAll('input, select').forEach((controle, coluna) => {
             controle.setAttribute('aria-label', `${nomes[coluna]} da transição ${indice + 1}`);
         });
+        exclusoes.children[indice].setAttribute('aria-label', `Excluir transição ${indice + 1}`);
     });
+    document.getElementById('semTransicoes').hidden = tabela.rows.length !== 0;
 }
 
 function preencher(dados) {
@@ -109,7 +116,9 @@ function preencher(dados) {
         document.getElementById(campo).value = dados[campo];
     }
     tabela.replaceChildren();
+    exclusoes.replaceChildren();
     dados.transicoes.forEach(adicionarTransicao);
+    atualizarRotulos();
 }
 
 function limparResultado() {

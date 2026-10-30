@@ -1,4 +1,5 @@
 HELP.md
+/PLANEJAMENTO_TEMPORARIO.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
