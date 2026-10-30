@@ -1,6 +1,6 @@
 # Planejamento temporario
 
-Status: somente planejamento; nenhuma etapa de implementacao autorizada.
+Status: etapa 1 autorizada, implementada, revisada e validada. Etapas 2 a 4 aguardam autorizacao.
 
 Objetivo: pagina local simples para configurar uma maquina de Turing e simular uma cadeia usando o codigo Java da aula.
 
@@ -22,10 +22,17 @@ Regras funcionais:
 
 Etapas (autorizar uma por vez):
 
-- [ ] 1. Adaptar motor Java: retornar resultado estruturado e historico, aceitar E/D, distinguir aceitacao/rejeicao/limite e limitar passos. Manter fita expansivel e classes existentes. Revisar com testes unitarios de aceitacao, rejeicao, entrada vazia, movimentos nas duas extremidades, loop e limite exato.
+- [x] 1. Adaptar motor Java: retornar resultado estruturado e historico, aceitar E/D, distinguir aceitacao/rejeicao/limite e limitar passos. Manter fita expansivel e classes existentes. Revisar com testes unitarios de aceitacao, rejeicao, entrada vazia, movimentos nas duas extremidades, loop e limite exato.
 - [ ] 2. Integrar HTTP: endpoint com validacao dos cinco campos, estados e duplicidades; instancia independente por requisicao; mensagens de erro claras. Retirar execucao automatica do exemplo no main e disponibilizar o exemplo na pagina. Testar contrato HTTP, dados invalidos e independencia entre execucoes.
 - [ ] 3. Criar pagina e conectar ao endpoint: campos, tabela editavel, simulacao, historico, erro destacado, persistencia e restauracao. Exibir dados como texto, sem interpretar HTML. Revisar fluxo completo no navegador e ajustar apenas problemas encontrados.
 - [ ] 4. Revisar entrega: executar testes existentes e novos, conferir exemplo inicial, alteracoes de transicoes, recarga, restauracao, rejeicao e limite. Documentar apenas o necessario para iniciar localmente e abrir a pagina.
+
+Validacao da etapa 1:
+- Motor e exemplo adaptados para E/D; resultado com status, motivo, estado/fita finais, total de transicoes e historico imutavel, incluindo configuracoes inicial e final. Cabecote usa indice zero na fita de cada configuracao.
+- 13 testes JUnit aprovados: 12 novos testes do motor e o teste existente de contexto Spring. Cobrem exemplo (8 passos), rejeicao, entrada vazia, aceitacao imediata e sem consumir toda a entrada, expansao nas extremidades, direcao invalida, loop, aceitacao/rejeicao no limite exato e independencia entre maquinas.
+- Compilacao com javac do Java 21 e execucao direta pelo JUnit Platform, usando dependencias existentes e arquivos auxiliares temporarios. Mockito carregado como agente nessa execucao.
+- Limitacao do ambiente: gradlew test nao executou por acesso negado ao cache; tentativa com diretorio temporario tambem bloqueada na conexao ao daemon. Validacao substituida pela execucao direta acima, sem alterar configuracao ou dependencias do projeto. Execucao pelo Gradle permanece para conferencia em ambiente sem essas restricoes.
+- Endpoint, validacao HTTP e pagina permanecem pendentes para as etapas seguintes. Exemplo ainda executa no main, conforme retirada prevista na etapa 2.
 
 Execucao prevista: iniciar o Spring Boot pelo Gradle Wrapper (bootRun) com Java 21 e abrir http://localhost:8080. Sem servidor separado para frontend.
 

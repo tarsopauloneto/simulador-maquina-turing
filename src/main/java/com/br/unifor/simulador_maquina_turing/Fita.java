@@ -27,17 +27,19 @@ public class Fita {
     }
 
     public void mover(char direcao){
-        if (direcao=='R'){
+        if (direcao=='D'){
             cabecote ++;
             if (cabecote>=celulas.size()){
                 celulas.add(BRANCO);
             }
-        } else if (direcao == 'L') {
+        } else if (direcao == 'E') {
             cabecote --;
             if (cabecote<0){
                 celulas.add(0,BRANCO);
                 cabecote =0;
             }
+        } else {
+            throw new IllegalArgumentException("Direcao deve ser E ou D.");
         }
     }
 

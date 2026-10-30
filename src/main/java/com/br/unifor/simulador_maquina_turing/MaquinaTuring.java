@@ -6,10 +6,12 @@ import java.util.Optional;
 
 public class MaquinaTuring {
 
+    public static final int LIMITE_PASSOS = 1000;
+
     private String estadoAtual;
-    private String estadoFinal;
-    private Fita fita;
-    private List<Transicao> transicaos = new ArrayList<>();
+    private final String estadoFinal;
+    private final Fita fita;
+    private final List<Transicao> transicoes = new ArrayList<>();
 
     public MaquinaTuring(String estadoAtual, String estadoFinal, Fita fita) {
         this.estadoAtual = estadoAtual;
@@ -17,44 +19,51 @@ public class MaquinaTuring {
         this.fita = fita;
     }
 
-    public void adicionarTransicao(Transicao transicao){
-        transicaos.add(transicao);
+    public void adicionarTransicao(Transicao transicao) {
+        transicoes.add(transicao);
     }
 
-    public void executar(){
-        int passo =0;
+    public ResultadoSimulacao executar() {
+        int passos = 0;
+        List<PassoSimulacao> historico = new ArrayList<>();
 
-        while (!estadoAtual.equals(estadoFinal)){
-            char simbolo = fita.ler();
+        while (true) {
+            historico.add(new PassoSimulacao(passos, estadoAtual, fita.ler(),
+                    fita.conteudo(), fita.getCabecote()));
 
-            Optional<Transicao> transicaoEntrada = transicaos.stream()
-                    .filter(t->t.getEstadoAtual().equals(estadoAtual)
-                            && t.getSimboloLido()==simbolo)
-                    .findFirst();
-
-            if (transicaoEntrada.isEmpty()){
-                System.out.println("Maquina parou sem a transição valida! ");
-                break;
+            if (estadoAtual.equals(estadoFinal)) {
+                return resultado(ResultadoSimulacao.Status.ACEITA,
+                        "Estado de aceitacao atingido.", passos, historico);
             }
 
-            Transicao t = transicaoEntrada.get();
+            Optional<Transicao> proxima = buscarTransicao();
+            if (proxima.isEmpty()) {
+                return resultado(ResultadoSimulacao.Status.REJEITADA,
+                        "Maquina parou sem transicao valida fora do estado de aceitacao.", passos, historico);
+            }
 
-            System.out.println("Passo:  "+passo);
-            System.out.println(" Estado atual: " +estadoAtual);
-            System.out.println(" Simbolo lido: "+ simbolo);
-            System.out.println(" Fita : "+fita.conteudo());
-            System.out.println(" cabeçote : "+ fita.getCabecote());
-            System.out.println("=========================================");
+            // So ha limite atingido se a maquina ainda precisar executar outra transicao.
+            if (passos == LIMITE_PASSOS) {
+                return resultado(ResultadoSimulacao.Status.LIMITE_ATINGIDO,
+                        "ERRO: limite de passos atingido; possivel loop infinito.", passos, historico);
+            }
 
-            fita.escrever(t.getSimboloEscrito());
-            fita.mover(t.getMovimento());
-            estadoAtual = t.getNovoEstado();
-
-            passo++;
+            Transicao transicao = proxima.get();
+            fita.escrever(transicao.getSimboloEscrito());
+            fita.mover(transicao.getMovimento());
+            estadoAtual = transicao.getNovoEstado();
+            passos++;
         }
+    }
 
-        System.out.println(" Maquina finalizada!");
-        System.out.println(" Estado final: "+estadoAtual);
-        System.out.println(" FIta final: "+fita.conteudo());
+    private Optional<Transicao> buscarTransicao() {
+        return transicoes.stream()
+                .filter(t -> t.getEstadoAtual().equals(estadoAtual) && t.getSimboloLido() == fita.ler())
+                .findFirst();
+    }
+
+    private ResultadoSimulacao resultado(ResultadoSimulacao.Status status, String motivo,
+                                         int passos, List<PassoSimulacao> historico) {
+        return new ResultadoSimulacao(status, motivo, estadoAtual, fita.conteudo(), passos, historico);
     }
 }
