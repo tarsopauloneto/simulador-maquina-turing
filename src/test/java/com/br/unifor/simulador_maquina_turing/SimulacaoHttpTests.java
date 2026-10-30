@@ -165,6 +165,36 @@ class SimulacaoHttpTests {
     }
 
     @Test
+    void alterarTransicaoMudaResultadoSemAfetarExemploOriginal() throws Exception {
+        var dados = exemplo();
+        var transicoes = new ArrayList<Object>((List<?>) dados.get("transicoes"));
+        transicoes.set(0, transicao("q0", "0", "q3", "X", "E"));
+        dados.put("transicoes", transicoes);
+
+        simular(dados).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ACEITA"))
+                .andExpect(jsonPath("$.passos").value(1))
+                .andExpect(jsonPath("$.fitaFinal").value("BX00100B"))
+                .andExpect(jsonPath("$.historico[1].cabecote").value(0));
+
+        transicoes.remove(0);
+        simular(dados).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("REJEITADA"))
+                .andExpect(jsonPath("$.passos").value(0));
+
+        simular(exemplo()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ACEITA"))
+                .andExpect(jsonPath("$.passos").value(8))
+                .andExpect(jsonPath("$.fitaFinal").value("B00000BB"));
+    }
+
+    @Test
+    void raizEncaminhaParaPaginaInicial() throws Exception {
+        http.perform(get("/")).andExpect(status().isOk())
+                .andExpect(forwardedUrl("index.html"));
+    }
+
+    @Test
     void paginaDisponibilizaExemploInicial() throws Exception {
         http.perform(get("/index.html")).andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("000100")))

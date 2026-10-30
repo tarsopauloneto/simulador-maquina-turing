@@ -1,6 +1,6 @@
 # Planejamento temporario
 
-Status: etapas 1, 2 e 3 implementadas, revisadas e validadas. Etapa 4 aguarda autorizacao.
+Status: etapas 1, 2 e 3 implementadas, revisadas e validadas. Etapa 4 autorizada e em revisao; validacao final pendente.
 
 Objetivo: pagina local simples para configurar uma maquina de Turing e simular uma cadeia usando o codigo Java da aula.
 
@@ -48,10 +48,19 @@ Validacao da etapa 3:
 - Bloqueio inicial: Tomcat temporario nao iniciou por Permission denied: connect no loopback. Validacao retomada com servidor iniciado pelo usuario fora do sandbox. Gradle nao foi reexecutado pelo agente; bloqueio anterior permanece registrado acima.
 - Navegador: exemplo aceito em 8 passos com 9 configuracoes; edicao de cadeia, estado de destino e direcao preservada na recarga; adicionar/excluir transicoes; duplicidade exibida como erro do servidor; rejeicao e entrada vazia; loop interrompido em 1000 passos com 1001 configuracoes e erro visualmente destacado, distinto de rejeicao. Edicoes limpam resultados anteriores.
 - Restauracao: automacao da confirmacao interrompida pela ferramenta. Usuario concluiu o teste manual e confirmou persistencia ao recarregar e restauracao pelo botao. Validacao funcional da etapa 3 concluida com essa confirmacao; sem novos testes automatizados executados nesta retomada.
-- Etapa 4 nao iniciada.
+- Etapa 4 autorizada posteriormente; acompanhamento abaixo.
 - Limpeza concluida: usuario removeu validacao-temporaria/ pelo terminal local; ausencia da pasta conferida pelo agente.
 
-Execucao prevista: iniciar o Spring Boot pelo Gradle Wrapper (bootRun) com Java 21 e abrir http://localhost:8080. Sem servidor separado para frontend.
+Revisao da etapa 4:
+- Implementacao e testes existentes revisados; sem necessidade identificada de alterar o motor ou a interface. README.md adicionado com Java 21, bootRun, endereco local, uso basico e comando/relatorio de testes.
+- Dois testes HTTP adicionados: alteracao dos campos de uma transicao com efeito no resultado, exclusao e nova execucao do exemplo sem contaminacao; encaminhamento de / para index.html.
+- Usuario identificou falha de compilacao no set da lista do novo teste. Tipo explicitado como ArrayList<Object> para permitir substituir elementos copiados de List<?> sem cast nao verificado. Correcao validada na execucao Gradle abaixo.
+- node --check src/main/resources/static/app.js e git diff --check executados e aprovados.
+- Usuario executou .\gradlew.bat test e informou BUILD SUCCESSFUL. Relatorios XML conferidos pelo agente: 51 testes (12 motor, 38 HTTP, 1 contexto), sem falhas, erros ou ignorados. Aviso de compartilhamento de classes da JVM nao impediu a aprovacao.
+- Usuario confirmou servidor iniciado. Nova tentativa de conferencia no navegador bloqueada por permissao salva/politica que nega acesso a http://localhost:8080. Sem tentativa de contorno. Validacao da etapa 3 permanece registrada, mas a nova conferencia desta etapa esta pendente.
+- Pendencia: conferencia final de exemplo (aceita em 8 passos), edicao/adicao/exclusao de transicoes, recarga, restauracao, rejeicao e limite destacado. Pode ser concluida manualmente pelo usuario. Etapa permanece [ ] ate concluir a validacao.
+
+Execucao: iniciar o Spring Boot pelo Gradle Wrapper (bootRun) com Java 21 e abrir http://localhost:8080. Instrucoes no README.md. Sem servidor separado para frontend.
 
 Combinado com o usuario: quando necessario, solicitar que ele execute os testes pelo Gradle e inicie o servidor no terminal local. Nao recriar infraestrutura temporaria para contornar os bloqueios do ambiente.
 
