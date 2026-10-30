@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulador de máquina de Turing</title>
+</head>
+<body>
+    <h1>Simulador de máquina de Turing</h1>
+    <p>Exemplo inicial. Os controles de edição e simulação serão disponibilizados na etapa 3.</p>
+    <p>Entrada: <code>000100</code>. Estado inicial: <code>q0</code>. Estado de aceitação: <code>q3</code>.</p>
+    <p>B = branco; E = esquerda; D = direita.</p>
+    <table border="1">
+        <caption>Transições do exemplo</caption>
+        <thead><tr><th>Estado atual</th><th>Símbolo lido</th><th>Novo estado</th><th>Símbolo escrito</th><th>Direção</th></tr></thead>
+        <tbody>
+            <tr><td>q0</td><td>0</td><td>q0</td><td>0</td><td>D</td></tr>
+            <tr><td>q0</td><td>1</td><td>q1</td><td>0</td><td>D</td></tr>
+            <tr><td>q1</td><td>0</td><td>q1</td><td>0</td><td>D</td></tr>
+            <tr><td>q1</td><td>B</td><td>q2</td><td>B</td><td>E</td></tr>
+            <tr><td>q2</td><td>0</td><td>q3</td><td>B</td><td>D</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>

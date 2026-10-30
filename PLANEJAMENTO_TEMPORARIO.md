@@ -1,6 +1,6 @@
 # Planejamento temporario
 
-Status: etapa 1 autorizada, implementada, revisada e validada. Etapas 2 a 4 aguardam autorizacao.
+Status: etapas 1 e 2 autorizadas, implementadas, revisadas e validadas. Etapas 3 e 4 aguardam autorizacao.
 
 Objetivo: pagina local simples para configurar uma maquina de Turing e simular uma cadeia usando o codigo Java da aula.
 
@@ -23,7 +23,7 @@ Regras funcionais:
 Etapas (autorizar uma por vez):
 
 - [x] 1. Adaptar motor Java: retornar resultado estruturado e historico, aceitar E/D, distinguir aceitacao/rejeicao/limite e limitar passos. Manter fita expansivel e classes existentes. Revisar com testes unitarios de aceitacao, rejeicao, entrada vazia, movimentos nas duas extremidades, loop e limite exato.
-- [ ] 2. Integrar HTTP: endpoint com validacao dos cinco campos, estados e duplicidades; instancia independente por requisicao; mensagens de erro claras. Retirar execucao automatica do exemplo no main e disponibilizar o exemplo na pagina. Testar contrato HTTP, dados invalidos e independencia entre execucoes.
+- [x] 2. Integrar HTTP: endpoint com validacao dos cinco campos, estados e duplicidades; instancia independente por requisicao; mensagens de erro claras. Retirar execucao automatica do exemplo no main e disponibilizar o exemplo na pagina. Testar contrato HTTP, dados invalidos e independencia entre execucoes.
 - [ ] 3. Criar pagina e conectar ao endpoint: campos, tabela editavel, simulacao, historico, erro destacado, persistencia e restauracao. Exibir dados como texto, sem interpretar HTML. Revisar fluxo completo no navegador e ajustar apenas problemas encontrados.
 - [ ] 4. Revisar entrega: executar testes existentes e novos, conferir exemplo inicial, alteracoes de transicoes, recarga, restauracao, rejeicao e limite. Documentar apenas o necessario para iniciar localmente e abrir a pagina.
 
@@ -32,7 +32,14 @@ Validacao da etapa 1:
 - 13 testes JUnit aprovados: 12 novos testes do motor e o teste existente de contexto Spring. Cobrem exemplo (8 passos), rejeicao, entrada vazia, aceitacao imediata e sem consumir toda a entrada, expansao nas extremidades, direcao invalida, loop, aceitacao/rejeicao no limite exato e independencia entre maquinas.
 - Compilacao com javac do Java 21 e execucao direta pelo JUnit Platform, usando dependencias existentes e arquivos auxiliares temporarios. Mockito carregado como agente nessa execucao.
 - Limitacao do ambiente: gradlew test nao executou por acesso negado ao cache; tentativa com diretorio temporario tambem bloqueada na conexao ao daemon. Validacao substituida pela execucao direta acima, sem alterar configuracao ou dependencias do projeto. Execucao pelo Gradle permanece para conferencia em ambiente sem essas restricoes.
-- Endpoint, validacao HTTP e pagina permanecem pendentes para as etapas seguintes. Exemplo ainda executa no main, conforme retirada prevista na etapa 2.
+- Na conclusao da etapa 1, endpoint, validacao HTTP e pagina permaneciam pendentes. Exemplo ainda executava no main, conforme retirada prevista na etapa 2.
+
+Validacao da etapa 2:
+- POST /api/simular recebe entrada, estadoInicial, estadoAceitacao e transicoes (estadoAtual, simboloLido, novoEstado, simboloEscrito, direcao). Retorna o ResultadoSimulacao existente, incluindo historico inicial e final. Cada requisicao cria sua propria Fita e MaquinaTuring.
+- Validacao manual no servidor, sem dependencias novas: campos obrigatorios, estados nao vazios, simbolos de um caractere compativel com o motor, E/D e determinismo. Entrada vazia e lista vazia sao validas. Dados invalidos e JSON ausente/malformado retornam HTTP 400 com campo erro. Simulacoes validas retornam HTTP 200; LIMITE_ATINGIDO continua distinto de REJEITADA.
+- Main apenas inicia o Spring Boot. Pagina estatica inicial disponibiliza o exemplo completo; controles e integracao visual continuam na etapa 3.
+- 49 testes JUnit aprovados: 13 existentes e 36 novos casos HTTP com contexto Spring e MockMvc. Cobrem contrato JSON, exemplo, entrada vazia, rejeicao, limite, campos invalidos, duplicidade, JSON invalido, independencia sequencial/concorrente e pagina estatica.
+- gradlew test --no-daemon bloqueado por acesso negado ao lock do cache. Validacao substituida por compilacao javac Java 21 e execucao direta de toda a suite pelo JUnit Platform, usando dependencias locais e Mockito como agente. Sem alteracoes no build, caches ou dependencias; conferencia pelo Gradle permanece pendente em ambiente sem essa restricao.
 
 Execucao prevista: iniciar o Spring Boot pelo Gradle Wrapper (bootRun) com Java 21 e abrir http://localhost:8080. Sem servidor separado para frontend.
 
