@@ -1,4 +1,4 @@
-# Simulador de máquina de Turing
+# Simulador – Máquina de Turing
 
 Requisito: JDK 21. Use o Gradle Wrapper incluído no projeto; não é necessário instalar Gradle separadamente. A primeira execução precisa de internet para baixar as dependências.
 
