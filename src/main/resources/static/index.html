@@ -1,25 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Simulador de máquina de Turing</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de máquina de Turing</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
 </head>
 <body>
-    <h1>Simulador de máquina de Turing</h1>
-    <p>Exemplo inicial. Os controles de edição e simulação serão disponibilizados na etapa 3.</p>
-    <p>Entrada: <code>000100</code>. Estado inicial: <code>q0</code>. Estado de aceitação: <code>q3</code>.</p>
-    <p>B = branco; E = esquerda; D = direita.</p>
-    <table border="1">
-        <caption>Transições do exemplo</caption>
-        <thead><tr><th>Estado atual</th><th>Símbolo lido</th><th>Novo estado</th><th>Símbolo escrito</th><th>Direção</th></tr></thead>
-        <tbody>
-            <tr><td>q0</td><td>0</td><td>q0</td><td>0</td><td>D</td></tr>
-            <tr><td>q0</td><td>1</td><td>q1</td><td>0</td><td>D</td></tr>
-            <tr><td>q1</td><td>0</td><td>q1</td><td>0</td><td>D</td></tr>
-            <tr><td>q1</td><td>B</td><td>q2</td><td>B</td><td>E</td></tr>
-            <tr><td>q2</td><td>0</td><td>q3</td><td>B</td><td>D</td></tr>
-        </tbody>
-    </table>
+<h1>Simulador de máquina de Turing</h1>
+<p>B = branco; E = esquerda; D = direita. Limite: 1000 transições por execução.</p>
+<p id="aviso" role="status" hidden></p>
+<form id="configuracao"><fieldset id="controles">
+<legend>Entrada e configuração</legend>
+<p><label>Cadeia (pode ser vazia): <input id="entrada" value="000100"></label></p>
+<p><label>Estado inicial: <input id="estadoInicial" value="q0" required></label></p>
+<p><label>Estado de aceitação: <input id="estadoAceitacao" value="q3" required></label></p>
+<h2>Transições</h2>
+<div class="tabela"><table>
+<caption>Configuração das transições</caption>
+<thead><tr><th>Estado atual</th><th>Símbolo lido</th><th>Novo estado</th><th>Símbolo escrito</th><th>Direção</th><th>Ação</th></tr></thead>
+<tbody id="transicoes"></tbody>
+</table></div>
+<p><button type="button" id="adicionar">Adicionar transição</button></p>
+<button type="submit">Simular</button>
+<button type="button" id="restaurar">Restaurar padrão</button>
+</fieldset></form>
+<section id="resultados" aria-labelledby="tituloResultado" aria-live="polite" aria-busy="false">
+<h2 id="tituloResultado">Resultados</h2>
+<p id="mensagem" role="status">Configure a máquina e clique em Simular.</p>
+<div id="detalhes" hidden>
+<p>Estado final: <code id="estadoFinal"></code></p>
+<p>Fita final: <code id="fitaFinal"></code></p>
+<p>Quantidade de passos: <span id="passos"></span></p>
+<p>O histórico inclui as configurações inicial e final. A posição do cabeçote começa em zero na fita de cada linha.</p>
+<div class="tabela"><table>
+<caption>Histórico da simulação</caption>
+<thead><tr><th>Passo</th><th>Estado</th><th>Símbolo lido</th><th>Fita</th><th>Posição do cabeçote</th></tr></thead>
+<tbody id="historico"></tbody>
+</table></div>
+</div>
+</section>
+<noscript>Ative o JavaScript para configurar e simular a máquina.</noscript>
 </body>
 </html>

@@ -168,7 +168,12 @@ class SimulacaoHttpTests {
     void paginaDisponibilizaExemploInicial() throws Exception {
         http.perform(get("/index.html")).andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("000100")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("<td>q2</td><td>0</td><td>q3</td><td>B</td><td>D</td>")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("id=\"transicoes\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("src=\"app.js\"")));
+        http.perform(get("/app.js")).andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString(
+                        "{ estadoAtual: 'q2', simboloLido: '0', novoEstado: 'q3', simboloEscrito: 'B', direcao: 'D' }")));
+        http.perform(get("/style.css")).andExpect(status().isOk());
     }
 
     private org.springframework.test.web.servlet.ResultActions simular(Map<String, Object> dados) throws Exception {

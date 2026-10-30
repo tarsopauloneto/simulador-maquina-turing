@@ -1,6 +1,6 @@
 # Planejamento temporario
 
-Status: etapas 1 e 2 autorizadas, implementadas, revisadas e validadas. Etapas 3 e 4 aguardam autorizacao.
+Status: etapas 1, 2 e 3 implementadas, revisadas e validadas. Etapa 4 aguarda autorizacao.
 
 Objetivo: pagina local simples para configurar uma maquina de Turing e simular uma cadeia usando o codigo Java da aula.
 
@@ -24,7 +24,7 @@ Etapas (autorizar uma por vez):
 
 - [x] 1. Adaptar motor Java: retornar resultado estruturado e historico, aceitar E/D, distinguir aceitacao/rejeicao/limite e limitar passos. Manter fita expansivel e classes existentes. Revisar com testes unitarios de aceitacao, rejeicao, entrada vazia, movimentos nas duas extremidades, loop e limite exato.
 - [x] 2. Integrar HTTP: endpoint com validacao dos cinco campos, estados e duplicidades; instancia independente por requisicao; mensagens de erro claras. Retirar execucao automatica do exemplo no main e disponibilizar o exemplo na pagina. Testar contrato HTTP, dados invalidos e independencia entre execucoes.
-- [ ] 3. Criar pagina e conectar ao endpoint: campos, tabela editavel, simulacao, historico, erro destacado, persistencia e restauracao. Exibir dados como texto, sem interpretar HTML. Revisar fluxo completo no navegador e ajustar apenas problemas encontrados.
+- [x] 3. Criar pagina e conectar ao endpoint: campos, tabela editavel, simulacao, historico, erro destacado, persistencia e restauracao. Exibir dados como texto, sem interpretar HTML. Revisar fluxo completo no navegador e ajustar apenas problemas encontrados.
 - [ ] 4. Revisar entrega: executar testes existentes e novos, conferir exemplo inicial, alteracoes de transicoes, recarga, restauracao, rejeicao e limite. Documentar apenas o necessario para iniciar localmente e abrir a pagina.
 
 Validacao da etapa 1:
@@ -41,6 +41,18 @@ Validacao da etapa 2:
 - 49 testes JUnit aprovados: 13 existentes e 36 novos casos HTTP com contexto Spring e MockMvc. Cobrem contrato JSON, exemplo, entrada vazia, rejeicao, limite, campos invalidos, duplicidade, JSON invalido, independencia sequencial/concorrente e pagina estatica.
 - gradlew test --no-daemon bloqueado por acesso negado ao lock do cache. Validacao substituida por compilacao javac Java 21 e execucao direta de toda a suite pelo JUnit Platform, usando dependencias locais e Mockito como agente. Sem alteracoes no build, caches ou dependencias; conferencia pelo Gradle permanece pendente em ambiente sem essa restricao.
 
+Validacao da etapa 3:
+- Pagina com campos globais, tabela editavel, adicionar/excluir transicoes, POST /api/simular, resultado e historico completo. Dados exibidos com textContent/value, sem interpretar HTML. Erros HTTP/conexao e limite destacados; limite nao e rejeicao.
+- Configuracao salva no localStorage a cada alteracao; recarga recupera dados validos, ou usa o exemplo se ausentes/invalidos. Restauracao pede confirmacao, salva o exemplo e limpa resultados. Falha de armazenamento gera aviso. Edicoes limpam resultados antigos; controles ficam desabilitados durante a requisicao.
+- node --check aprovado. Compilacao javac Java 21 e 49 testes JUnit aprovados via JUnit Platform com dependencias locais e Mockito como agente. Teste da pagina ajustado para conferir HTML e entrega de app.js/style.css. Sem dependencias novas ou alteracoes no motor, build e caches.
+- Bloqueio inicial: Tomcat temporario nao iniciou por Permission denied: connect no loopback. Validacao retomada com servidor iniciado pelo usuario fora do sandbox. Gradle nao foi reexecutado pelo agente; bloqueio anterior permanece registrado acima.
+- Navegador: exemplo aceito em 8 passos com 9 configuracoes; edicao de cadeia, estado de destino e direcao preservada na recarga; adicionar/excluir transicoes; duplicidade exibida como erro do servidor; rejeicao e entrada vazia; loop interrompido em 1000 passos com 1001 configuracoes e erro visualmente destacado, distinto de rejeicao. Edicoes limpam resultados anteriores.
+- Restauracao: automacao da confirmacao interrompida pela ferramenta. Usuario concluiu o teste manual e confirmou persistencia ao recarregar e restauracao pelo botao. Validacao funcional da etapa 3 concluida com essa confirmacao; sem novos testes automatizados executados nesta retomada.
+- Etapa 4 nao iniciada.
+- Limpeza concluida: usuario removeu validacao-temporaria/ pelo terminal local; ausencia da pasta conferida pelo agente.
+
 Execucao prevista: iniciar o Spring Boot pelo Gradle Wrapper (bootRun) com Java 21 e abrir http://localhost:8080. Sem servidor separado para frontend.
+
+Combinado com o usuario: quando necessario, solicitar que ele execute os testes pelo Gradle e inicie o servidor no terminal local. Nao recriar infraestrutura temporaria para contornar os bloqueios do ambiente.
 
 Controle: antes de cada etapa, ler este arquivo e analisar o codigo atual. Iniciar apenas a etapa expressamente autorizada. Marcar [x] somente apos implementar, revisar e validar; registrar testes e pendencias de forma breve. Nao avancar automaticamente. Validacoes bloqueadas devem ficar registradas e impedem marcar a etapa como concluida.
